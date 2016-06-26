@@ -7,17 +7,20 @@ import com.dano.ElevatorButtonStub;
 
 public class ElevatorSimulator {
 
+	private static final int ZERO = 0;
 	private static final String LIFT_2 = "1";
 	private static final String LIFT_1 = "0";
+	public static final String DEFAULT_URL = "http://localhost:8080/ElevatorMonitor-0.0.1-SNAPSHOT/update";
+	
 	private ElevatorButtonStub elevator1;
 	private ElevatorButtonStub elevator2;
 	private ElevatorController controller1;
 	private ElevatorController controller2;
 	
-	public ElevatorSimulator() {
-		controller1 = new ElevatorController(LIFT_1, "http://localhost:8080/update");
+	public ElevatorSimulator(final String url) {
+		controller1 = new ElevatorController(LIFT_1, url);
 		elevator1 = new ElevatorButtonStub(controller1, controller1);
-		controller2 = new ElevatorController(LIFT_2, "http://localhost:8080/update");
+		controller2 = new ElevatorController(LIFT_2, url);
 		elevator2 = new ElevatorButtonStub(controller2, controller2);
 	}
 	
@@ -38,7 +41,14 @@ public class ElevatorSimulator {
 	}
 	
 	public static void main(String[] args) {
-		new ElevatorSimulator().run();
+		String url;
+		if ((null == args) || (ZERO == args.length)) {
+			url = DEFAULT_URL;
+		}
+		else {
+			url = args[ZERO];
+		}
+		new ElevatorSimulator(url).run();
 	}
 
 	public ElevatorController getElevator1() {
