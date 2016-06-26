@@ -14,7 +14,7 @@ public class ElevatorButtonStub implements ElevatorButtonFacade {
 		this.callback = callback;
 	}
 	
-	@Override
+//	@Override
 	public void pressButton(ElevatorButton button) {
 		if (button == null){
 			throw new IllegalArgumentException("Elevator button cannot be null");

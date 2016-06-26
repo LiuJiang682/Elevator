@@ -90,9 +90,11 @@ public class ElevatorControllerTest {
 	 * Given the user can access the controller 
 	 * When the constructor called Then
 	 * the controller should return
+	 * @throws Exception 
 	 */
 	@Test
-	public void whenConstructorCalledThenControllerShouldReturn() {
+	public void whenConstructorCalledThenControllerShouldReturn() throws Exception {
+		givenMockClient();
 		givenLift();
 		// Then the controller should be exist
 		assertNotNull(controller);
@@ -168,9 +170,11 @@ public class ElevatorControllerTest {
 	/**
 	 * Given the controller on the ground floor When the lockBreak called Then
 	 * the lift lock status should be lock
+	 * @throws Exception 
 	 */
 	@Test
-	public void whenLockBreakCalledThenLockStatusShouldLock() {
+	public void whenLockBreakCalledThenLockStatusShouldLock() throws Exception {
+		givenMockClient();
 		// Given the user can access the controller
 		givenLift();
 		// When the lockBreaks called
@@ -182,9 +186,11 @@ public class ElevatorControllerTest {
 	/**
 	 * Given the controller on the ground floor When the unlockBreak called Then
 	 * the lift lock status should be unlock
+	 * @throws Exception 
 	 */
 	@Test
-	public void whenUnlockBreakCalledThenLockStatusShouldUnlock() {
+	public void whenUnlockBreakCalledThenLockStatusShouldUnlock() throws Exception {
+		givenMockClient();
 		// Given the user can access the controller
 		givenLift();
 		// When the unlockBreaks called
@@ -219,95 +225,15 @@ public class ElevatorControllerTest {
 	 */
 	@Test
 	public void whenNullButtonPressWithFloorTwoThenLiftShouldNotChange() throws Exception {
+		givenMockClient();
 		// Given the user can access the controller
 		givenLift();
-		givenMockClient();
+		
 		controller.moveUpOneFloor();
 		// When the Down button pressed
 		controller.buttonPressed(null);
 		// Then the floor should not change
 		assertTrue(2 == controller.getFloor());
-	}
-
-	/**
-	 * Given the controller on the one floor When the Down buttonPress called
-	 * Then the lift floor should go down one floor
-	 */
-	@Test
-	public void whenDownButtonPressWithFloorTwoThenFloorShouldChange() {
-		// Given the user can access the controller
-		givenPartialMockController();
-		initMockFloor();
-		PowerMockito.doCallRealMethod().when(controller).moveUpOneFloor();
-		PowerMockito.doCallRealMethod().when(controller).moveDownOneFloor();
-		PowerMockito.doCallRealMethod().when(controller).buttonPressed(Matchers.any(ElevatorButton.class));
-		controller.moveUpOneFloor();
-		// When the Down button pressed
-		controller.buttonPressed(ElevatorButton.DOWN);
-		
-		// Then the floor should not change
-		assertTrue(1 == controller.getFloor());
-		verify(controller, times(2)).sendDataToServer();
-	}
-
-	/**
-	 * Given the controller on the one floor When the Up buttonPress called Then
-	 * the lift floor should go down one floor
-	 * @throws Exception 
-	 */
-	@Test
-	public void whenUpButtonPressWithFloorTwoThenFloorShouldChange() throws Exception {
-		// Given the user can access the controller
-		givenLift();
-		givenMockClient();
-		controller.moveUpOneFloor();
-		// When the up button pressed
-		controller.buttonPressed(ElevatorButton.UP);
-		;
-		// Then the floor should not change
-		assertTrue(3 == controller.getFloor());
-	}
-
-	/**
-	 * Given the controller on the one floor When the Lock buttonPress called
-	 * Then the lift break should lock
-	 * @throws Exception 
-	 */
-	@Test
-	public void whenLockButtonPressWithFloorTwoThenBreakShouldBeLock() throws Exception {
-		// Given the user can access the controller
-		givenLift();
-		givenMockClient();
-		controller.moveUpOneFloor();
-		// When the lock button pressed
-		controller.buttonPressed(ElevatorButton.LOCK);
-		;
-		// Then the break should be lock
-		assertEquals(ElevatorController.LOCK_BREAK, controller.getLockStatus());
-	}
-
-	/**
-	 * Given the controller on the one floor 
-	 * When the unLock buttonPress called
-	 * Then the lift break should be unlock
-	 * @throws Exception 
-	 */
-	@Test
-	public void whenUnLockButtonPressWithFloorTwoThenBreakShouldBeUnlock() throws Exception {
-		// Given the user can access the controller
-		givenLift();
-		givenMockClient();
-		controller.moveUpOneFloor();
-		// When the lock button pressed
-		controller.buttonPressed(ElevatorButton.LOCK);
-		
-		// Then the break should be lock
-		assertEquals(ElevatorController.LOCK_BREAK, controller.getLockStatus());
-		// When the unlock button pressed
-		controller.buttonPressed(ElevatorButton.UNLOCK);
-		
-		// Then the break should be unlock
-		assertEquals(ElevatorController.UNLOCK_BREAK, controller.getLockStatus());
 	}
 	
 	/**
@@ -318,9 +244,10 @@ public class ElevatorControllerTest {
 	 */
 	@Test
 	public void whenMoveToDestFloorCalledThenDestFloorShouldBeUpdated() throws Exception {
+		givenMockClient();
 		// Given the user can access the controller
 		givenLift();
-		givenMockClient();
+		
 		controller.moveUpOneFloor();
 		// When the movingElevatorToFloor called
 		controller.movingElevatorToFloor(5);
@@ -337,9 +264,10 @@ public class ElevatorControllerTest {
 	 */
 	@Test
 	public void whenMoveToDestFloorCalledWithBlowMinThenDestFloorShouldNOTBeUpdated() throws Exception {
+		givenMockClient();
 		// Given the user can access the controller
 		givenLift();
-		this.givenMockClient();
+		
 		controller.moveUpOneFloor();
 		// When the movingElevatorToFloor called
 		controller.movingElevatorToFloor(0);
@@ -356,14 +284,15 @@ public class ElevatorControllerTest {
 	 */
 	@Test
 	public void whenMoveToDestFloorCalledWithAboveMaxThenDestFloorShouldNOTBeUpdated() throws Exception {
+		this.givenMockClient();
 		// Given the user can access the controller
 		givenLift();
-		this.givenMockClient();
+		
 		controller.moveUpOneFloor();
 		// When the movingElevatorToFloor called
 		controller.movingElevatorToFloor(7);
 		
-		// Then the destFloor should be updated
+		// Then the destFloor should not be updated
 		assertTrue(-1 == controller.getDestFloor());
 	}
 
@@ -393,13 +322,14 @@ public class ElevatorControllerTest {
 	 */
 	@Test
 	public void whenSendDataToServerCalledThenDataSend() throws Exception {
+		givenMockClient();
 		//Given the lift
 		givenLift();
-		givenMockClient();
+		
 		//When the sendDataToServer method called
 		controller.sendDataToServer();
 		//Then data should be send
-		verify(mockClient).update(Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyString());
+		verify(mockClient, times(2)).update(Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyString());
 	}
 
 	private void givenMockClient() throws Exception {

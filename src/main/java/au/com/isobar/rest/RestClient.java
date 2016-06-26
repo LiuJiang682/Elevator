@@ -30,7 +30,7 @@ public class RestClient {
 					.append(lockStatus)
 					.append("\"}")
 					.toString();
-			System.out.println(input);
+//			System.out.println(input);
 			OutputStream outputStream = conn.getOutputStream();
 			outputStream.write(input.getBytes());
 			outputStream.flush();
@@ -40,7 +40,7 @@ public class RestClient {
 				StringBuilder buf = new StringBuilder();
 				String output;
 				while ((output = reader.readLine()) != null) {
-					System.out.println(output);
+//					System.out.println(output);
 					buf.append(output);
 				}
 				

@@ -49,6 +49,7 @@ public class ElevatorController implements ElevatorFacade, ElevatorButtonCallbac
 		this.moving = DEFAULT_MOVING;
 		this.floor = MIN;
 		this.lockStatus = DEFAULT_LOCK_STATUS;
+		this.sendDataToServer();
 	}
 
 	public void moveDownOneFloor() {
@@ -69,39 +70,16 @@ public class ElevatorController implements ElevatorFacade, ElevatorButtonCallbac
 
 	public void lockBreaks() {
 		this.lockStatus = LOCK_BREAK;
+		this.sendDataToServer();
 	}
 
 	public void unlockBreaks() {
 		this.lockStatus = UNLOCK_BREAK;
+		this.sendDataToServer();
 	}
 
 	public void buttonPressed(ElevatorButton button) {
-		if (null != button) {
-			//Only work on button is not null
-			boolean updateServer = true;
-			if (ElevatorButton.DOWN.equals(button)) {
-				this.moveDownOneFloor();
-				updateServer = false;
-			}
-			else if(ElevatorButton.UP.equals(button)) {
-				this.moveUpOneFloor();
-				updateServer = false;
-			}
-			else if(ElevatorButton.LOCK.equals(button)) {
-				this.lockBreaks();
-			}
-			else if (ElevatorButton.UNLOCK.equals(button)) {
-				this.unlockBreaks();
-			}
-			else {
-				//Ignore the floor command
-				updateServer = false;
-			}
-			
-			if (updateServer) {
-				sendDataToServer();
-			}
-		}
+		//Ignore
 	}
 
 	protected void sendDataToServer() {
